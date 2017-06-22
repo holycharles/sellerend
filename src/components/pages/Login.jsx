@@ -4,7 +4,25 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
+import dva, { connect } from 'dva';
+export const loginModel = {
+  namespace: 'login',
+  state: {
+    index: 0
+  },
+  reducers: {
+   
+  },
+  effects: {
+    *add(action, { call, put }) {
 
+    },
+  },
+  subscriptions: {
+   
+  },
+}
+// @connect(({loginModel}) => ({...loginModel}))
 class Login extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
@@ -19,8 +37,10 @@ class Login extends React.Component {
     };
     render() {
         const { getFieldDecorator } = this.props.form;
+        console.log(this.props);
         return (
             <div className="login">
+                <div></div>
                 <div className="login-form" >
                     <div className="login-logo">
                         <span>React Admin</span>
@@ -63,5 +83,10 @@ class Login extends React.Component {
         );
     }
 }
+function mapStateToProps(state) {
+  console.log(state);
+  return { ...state.login };
+}
+//export default Form.create()(Login);
 
-export default Form.create()(Login);
+export default connect(mapStateToProps)(Form.create()(Login));

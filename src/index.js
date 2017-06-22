@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import './style/lib/animate.css';
-import { Router, Route, hashHistory, IndexRedirect } from 'react-router';
+//import { Router, Route, hashHistory, IndexRedirect } from 'react-router';
 import Page from './components/Page';
 import BasicForm from './components/forms/BasicForm';
 import BasicTable from './components/tables/BasicTables';
 import AdvancedTable from './components/tables/AdvancedTables';
 import AsynchronousTable from './components/tables/AsynchronousTable';
-import Login from './components/pages/Login';
+import Login, {loginModel} from './components/pages/Login';
 import Echarts from './components/charts/Echarts';
 import Recharts from './components/charts/Recharts';
 import Icons from './components/ui/Icons';
@@ -25,7 +25,11 @@ import Gallery from './components/ui/Gallery';
 import NotFound from './components/pages/NotFound';
 import BasicAnimations from './components/animation/BasicAnimations';
 import ExampleAnimations from './components/animation/ExampleAnimations';
+import dva, { connect } from 'dva';
+import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
+const app = dva();
 
+app.model(loginModel);
 
 const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
     require.ensure([], require => {
@@ -35,7 +39,7 @@ const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
 
 const routes =
     <Route path={'/'} components={Page}>
-        <IndexRedirect to="/app/dashboard/index" />
+        <IndexRedirect to="/login" />
         <Route path={'app'} component={App}>
             <Route path={'form'}>
                 <Route path={'basicForm'} component={BasicForm} />
@@ -72,9 +76,11 @@ const routes =
     </Route>;
 
 
-ReactDOM.render(
+app.router(()=> (
   <Router history={hashHistory}>
       {routes}
-  </Router>,
-  document.getElementById('root')
+  </Router>
+  )
 );
+
+app.start('#root');
