@@ -15,6 +15,21 @@ export const getPros = () => axios.post('http://api.xitu.io/resources/github', {
     console.log(error);
 });
 
+
+let sss="sellerId=1&rows=10&page=1"
+export const getOrders = () => axios({
+    method:'post',
+    url:'http://localhost:8890/seller/newServer/order/orders/list?'+sss,
+
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+}).then(function(res){
+    console.log(res.data);
+    return res.data;
+});
+
+
 export const npmDependencies = () => axios.get('./npm.json').then(res => res.data).catch(err => console.log(err));
 
 export const weibo = () => axios.get('./weibo.json').then(res => res.data).catch(err => console.log(err));

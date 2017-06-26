@@ -27,6 +27,8 @@ import BasicAnimations from './components/animation/BasicAnimations';
 import ExampleAnimations from './components/animation/ExampleAnimations';
 import dva, { connect } from 'dva';
 import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
+import allOrders from './components/ui/orders/Allorders';
+
 const app = dva();
 
 app.model(loginModel);
@@ -37,9 +39,23 @@ const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
     }, 'Wysiwyg');
 };
 
+let authLogin = ()=> {
+    if(localStorage.getItem("seller")==null)
+    {
+
+        location.href="#/login"
+    }
+    else
+    {
+
+        location.href="#/app/dashboard/index?_k=ccvsvl"
+    }
+
+}
+
 const routes =
-    <Route path={'/'} components={Page}>
-        <IndexRedirect to="/login" />
+    <Route path={'/'} components={Page} onEnter={authLogin}>
+
         <Route path={'app'} component={App}>
             <Route path={'form'}>
                 <Route path={'basicForm'} component={BasicForm} />
@@ -54,6 +70,7 @@ const routes =
                 <Route path={'recharts'} component={Recharts} />
             </Route>
             <Route path={'ui'}>
+                <Route path={'allorders'} component={allOrders} />
                 <Route path={'icons'} component={Icons} />
                 <Route path={'buttons'} component={Buttons} />
                 <Route path={'spins'} component={Spins} />

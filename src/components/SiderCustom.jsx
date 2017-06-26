@@ -71,7 +71,7 @@ class SiderCustom extends Component {
                         key="/app/ui"
                         title={<span><Icon type="scan" /><span className="nav-text">UI</span></span>}
                     >
-
+                        <Menu.Item key="/app/ui/orders"><Link to={'/app/ui/Allorders'}>全部订单</Link></Menu.Item>
                         <Menu.Item key="/app/ui/buttons"><Link to={'/app/ui/buttons'}>按钮</Link></Menu.Item>
                         <Menu.Item key="/app/ui/icons"><Link to={'/app/ui/icons'}>图标</Link></Menu.Item>
                         <Menu.Item key="/app/ui/spins"><Link to={'/app/ui/spins'}>加载中</Link></Menu.Item>
