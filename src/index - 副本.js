@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import './style/lib/animate.css';
-//import { Router, Route, hashHistory, IndexRedirect } from 'react-router';
+import { Router, Route, hashHistory, IndexRedirect } from 'react-router';
 import Page from './components/Page';
 import BasicForm from './components/forms/BasicForm';
 import BasicTable from './components/tables/BasicTables';
@@ -25,15 +25,9 @@ import Gallery from './components/ui/Gallery';
 import NotFound from './components/pages/NotFound';
 import BasicAnimations from './components/animation/BasicAnimations';
 import ExampleAnimations from './components/animation/ExampleAnimations';
-import TestForm, {testFormModel} from './components/hy/orders/BasicForm';
-//import addProduct, {addProductModel} from './components/hy/product/addProduct';
 import dva, { connect } from 'dva';
-import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
 const app = dva();
-
-//app.model(loginModel);
-app.model(testFormModel);
-
+app.model(loginModel);
 const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
     require.ensure([], require => {
         cb(null, require('./components/ui/Wysiwyg').default);
@@ -43,12 +37,7 @@ const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
 const routes =
     <Route path={'/'} components={Page}>
         <IndexRedirect to="/login" />
-        <Route path={'hy'} component={App}>
-                <Route path={'orders/form'} component={TestForm} />
-            <Route path={'product/addProduct'} component={TestForm} />
-        </Route>
         <Route path={'app'} component={App}>
-          
             <Route path={'form'}>
                 <Route path={'basicForm'} component={BasicForm} />
             </Route>
@@ -84,11 +73,9 @@ const routes =
     </Route>;
 
 
-app.router(()=> (
+ReactDOM.render(
   <Router history={hashHistory}>
       {routes}
-  </Router>
-  )
+  </Router>,
+  document.getElementById('root')
 );
-
-app.start('#root');

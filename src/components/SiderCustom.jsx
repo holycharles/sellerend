@@ -68,18 +68,20 @@ class SiderCustom extends Component {
                         <Link to={'/app/dashboard/index'}><Icon type="mobile" /><span className="nav-text">首页</span></Link>
                     </Menu.Item>
                     <SubMenu
-                        key="/app/ui/orders"
-                        title={<span><Icon type="scan" /><span className="nav-text">订单管理</span></span>}
+                        key="/app/ui"
+                        title={<span><Icon type="scan" /><span className="nav-text">UI</span></span>}
                     >
-                        <Menu.Item key="/hy/orders/form"><Link to={'/hy/orders/form'}>全部订单</Link></Menu.Item>
 
-                    </SubMenu>
-                    <SubMenu
-                        key="/app/ui/product"
-                        title={<span><Icon type="scan" /><span className="nav-text">商品管理</span></span>}
-                    >
-                        <Menu.Item key="/hy/orders/form"><Link to={'/hy/orders/form'}>添加商品</Link></Menu.Item>
-
+                        <Menu.Item key="/app/ui/buttons"><Link to={'/app/ui/buttons'}>按钮</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/icons"><Link to={'/app/ui/icons'}>图标</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/spins"><Link to={'/app/ui/spins'}>加载中</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/modals"><Link to={'/app/ui/modals'}>对话框</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/notifications"><Link to={'/app/ui/notifications'}>通知提醒框</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/tabs"><Link to={'/app/ui/tabs'}>标签页</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/banners"><Link to={'/app/ui/banners'}>轮播图</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/wysiwyg"><Link to={'/app/ui/wysiwyg'}>富文本</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/drags"><Link to={'/app/ui/drags'}>拖拽</Link></Menu.Item>
+                        <Menu.Item key="/app/ui/gallery"><Link to={'/app/ui/gallery'}>画廊</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu
                         key="/app/animation"
