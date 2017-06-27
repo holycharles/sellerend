@@ -11,15 +11,15 @@ export const loginModel = {
     index: 0
   },
   reducers: {
-
+   
   },
   effects: {
-    *add(action, { call, put }) {
-
-    },
+    *login(action, { call, put }) {
+        console.log("112222")
+    }
   },
   subscriptions: {
-
+   
   },
 }
 // @connect(({loginModel}) => ({...loginModel}))
@@ -28,38 +28,10 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                fetch("http://localhost:8890/seller/newseller/doLogin", {
-                    method: "POST",
-                    mode: "cors",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: 'name='+values.userName+'&password='+values.password
-                }) .then(response => response.json())
-                    .then(json => {
-                        console.log(json);
-                        if(json.message==null)
-                        {
-                            var seller=json.data;
-                            var sellerobj= JSON.stringify(seller);
-
-                            localStorage.setItem("seller",sellerobj);
-                            location.href="/#/app/dashboard/index"
-
-
-
-                        }
-                        else
-                        {
-                            alert(json.message);
-                            return;
-                        }
-                    })
-                    .catch(function(error) {
-                        console.log('request failed: ', error)
-                    })
+                console.log('Received values of form: ', values);
             }
-
+            console.log("props", this.props);
+            this.props.dispatch({ type: 'login/login' });
         });
     };
     gitHub = () => {
