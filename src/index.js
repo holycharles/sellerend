@@ -25,7 +25,8 @@ import Gallery from './components/ui/Gallery';
 import NotFound from './components/pages/NotFound';
 import BasicAnimations from './components/animation/BasicAnimations';
 import ExampleAnimations from './components/animation/ExampleAnimations';
-import TestForm, {testFormModel} from './components/hy/BasicForm';
+import TestForm, {testFormModel} from './components/hy/orders/BasicForm';
+import addProduct, {addProductModel} from './components/hy/product/addProduct';
 import dva, { connect } from 'dva';
 import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
 const app = dva();
@@ -43,7 +44,8 @@ const routes =
     <Route path={'/'} components={Page}>
         <IndexRedirect to="/login" />
         <Route path={'hy'} component={App}>
-                <Route path={'form'} component={TestForm} />
+                <Route path={'orders/form'} component={TestForm} />
+            <Route path={'product/addProduct'} component={TestForm} />
         </Route>
         <Route path={'app'} component={App}>
           

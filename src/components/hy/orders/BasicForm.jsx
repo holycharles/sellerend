@@ -3,9 +3,9 @@
  */
 import React, { Component }  from 'react';
 import { Table, Form, Row, Col, Input, Button, Icon, Card } from 'antd';
-import BreadcrumbCustom from '../BreadcrumbCustom';
+import BreadcrumbCustom from '../../BreadcrumbCustom';
 import dva, { connect } from 'dva';
-import {Request} from "../../utils"
+import {Request} from "../../../utils"
 const FormItem = Form.Item;
 
 export const testFormModel = {
@@ -31,20 +31,7 @@ export const testFormModel = {
           title: '地址',
           dataIndex: 'addressInfo',
           key: 'addressInfo',
-      }, {
-          title: 'Action',
-          key: 'action',
-          render: (text, record) => (
-              <span>
-              <a href="#">Action 一 {record.name}</a>
-              <span className="ant-divider" />
-              <a href="#">Delete</a>
-              <span className="ant-divider" />
-              <a href="#" className="ant-dropdown-link">
-                More actions <Icon type="down" />
-              </a>
-            </span>
-          ),
+
       }],
       rows: [],
       loading: false,
