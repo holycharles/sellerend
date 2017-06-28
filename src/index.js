@@ -33,7 +33,7 @@ import dva, { connect } from 'dva';
 import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
 const app = dva();
 
-//app.model(loginModel);
+app.model(loginModel);
 app.model(testFormModel);
 app.model(cateSelectModel);
 app.model(productAddModel);
@@ -43,10 +43,16 @@ const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
     }, 'Wysiwyg');
 };
 
+let authLogin = ()=> {
+    if(!localStorage.getItem("auth") && localStorage.getItem("remember")) {
+        location.href="#/login"
+    } else {
+        location.href="#/hy/orders/form"
+    }
+}
 const routes =
-    <Route path={'/'} components={Page}>
-        <IndexRedirect to="/login" />
-        <Route path={'hy'} component={App}>
+    <Route path={'/'} components={Page}  >
+        <Route path={'hy'} component={App} onEnter={authLogin}>
                 <Route path={'orders/form'} component={TestForm} />
             <Route path={'product/addProduct'} component={CateSelect} />
             <Route path={'product/productAdd'} component={ProductAdd} />
@@ -83,7 +89,7 @@ const routes =
             </Route>
             <Route path={'dashboard/index'} component={Dashboard} />
         </Route>
-        <Route path={'login'} components={Login} />
+        <Route path={'login'} components={Login} onEnter={authLogin} />
         <Route path={'404'} component={NotFound} />
     </Route>;
 

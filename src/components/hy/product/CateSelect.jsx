@@ -20,13 +20,9 @@ export const cateSelectModel = {
 
   reducers: {
       fetchEnd(state, { payload }) {
-          //console.log("payload1" , payload);
-          console.log(payload);
-
           return { ...state, ...payload};
       },
       fetchStart (state, { payload }) {
-          //console.log("payload1" , payload);
           return { ...state, ...payload};
       },
   },
@@ -51,7 +47,7 @@ export const cateSelectModel = {
 
       },
       *go ({payload}, {call, put}){
-          yield put(routerRedux.push('/#/hy/orders/form'));
+          yield put(routerRedux.push('hy/product/productAdd'));
       }
   },
   subscriptions: {

@@ -2,9 +2,11 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 const FormItem = Form.Item;
 import dva, { connect } from 'dva';
+import { routerRedux } from 'dva/router'
+import {Request} from "../../utils"
 export const loginModel = {
   namespace: 'login',
   state: {
@@ -14,8 +16,22 @@ export const loginModel = {
    
   },
   effects: {
-    *login(action, { call, put }) {
-        console.log("112222")
+    *login({payload}, { call, put }) {
+        try {
+           const response = yield call(Request, 'seller/newseller/doLogin', payload);
+           if(!response.success) {
+               message.error(response.message);
+           } else {
+               let {data} = response;
+               let sellerobj = JSON.stringify(data);
+               let {remember} = payload;
+               localStorage.setItem("remember", remember);
+               localStorage.setItem("auth", sellerobj);
+               yield put(routerRedux.push('hy/orders/form'));
+           }
+        } catch (error) {
+            console.log(error);
+        }
     }
   },
   subscriptions: {
@@ -28,28 +44,22 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                this.props.dispatch({ type: 'login/login', payload: values });
             }
-            console.log("props", this.props);
-            this.props.dispatch({ type: 'login/login' });
         });
-    };
-    gitHub = () => {
-        location.href = 'https://github.com/login/oauth/authorize?client_id=792cdcd244e98dcd2dee&redirect_uri=http://localhost:3006/&scope=user&state=reactAdmin';
     };
     render() {
         const { getFieldDecorator } = this.props.form;
-        console.log(this.props);
         return (
             <div className="login">
                 <div></div>
                 <div className="login-form" >
                     <div className="login-logo">
-                        <span>React Admin</span>
+                        <span>汉艺网商家端后台</span>
                     </div>
                     <Form onSubmit={this.handleSubmit} style={{maxWidth: '300px'}}>
                         <FormItem>
-                            {getFieldDecorator('userName', {
+                            {getFieldDecorator('name', {
                                 rules: [{ required: true, message: '请输入用户名!' }],
                             })(
                                 <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
@@ -74,9 +84,7 @@ class Login extends React.Component {
                                 登录
                             </Button>
                             或 <a href="">现在就去注册!</a>
-                            <p>
-                                <Icon type="github" onClick={this.gitHub} />(第三方登录)
-                            </p>
+
                         </FormItem>
                     </Form>
                 </div>
