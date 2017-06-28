@@ -1,7 +1,7 @@
 /**
  * Created by hao.cheng on 2017/4/15.
  */
-import React, { Component }  from 'react';
+import React, { Component, PropTypes }  from 'react';
 import { Table, Form, Row, Col, Input, Button, Icon, Card,Cascader } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import dva, { connect } from 'dva';
@@ -50,8 +50,8 @@ export const cateSelectModel = {
       *fetchSearch ({payload}, {call, put}){
 
       },
-      *setPage ({payload}, {call, put}){
-
+      *go ({payload}, {call, put}){
+          yield put(routerRedux.push('/#/hy/orders/form'));
       }
   },
   subscriptions: {
@@ -86,15 +86,12 @@ class BasicTables extends Component {
 
     }
     goNext = (e) => {
-        alert("2222");
-        routerRedux.push('product/productAdd')
-
-        //this.router.push("/#/hy/product/productAdd");
-    //    alert(cateId)
-
+        const {dispatch} = this.props;
+        dispatch({type: 'cateSelectModel/go'})
     }
 
     render() {
+        console.log(PropTypes);
         const { columns, rows } = this.props;
         const formItemLayout = {
             labelCol: { span: 5 },
@@ -122,7 +119,6 @@ class BasicTables extends Component {
                              <Row>
                                  <Col span={24} style={{ textAlign: 'right', paddingBottom: 20 }}>
                                      <Button type="primary"  htmlType="submit" >确定</Button>
-
                                  </Col>
                              </Row>
 
