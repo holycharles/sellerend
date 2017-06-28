@@ -6,6 +6,7 @@ import { Table, Form, Row, Col, Input, Button, Icon, Card,Cascader } from 'antd'
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import dva, { connect } from 'dva';
 import {Request} from "../../../utils"
+import { routerRedux } from 'dva/router'
 import { browserHistory } from 'react-router'
 const FormItem = Form.Item;
 let cateId;
@@ -62,6 +63,8 @@ export const cateSelectModel = {
 
 
 class BasicTables extends Component {
+
+
     handleSearch = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -83,8 +86,11 @@ class BasicTables extends Component {
 
     }
     goNext = (e) => {
+        alert("2222");
+        routerRedux.push('product/productAdd')
 
-        alert(cateId)
+        //this.router.push("/#/hy/product/productAdd");
+    //    alert(cateId)
 
     }
 
