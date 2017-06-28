@@ -26,14 +26,14 @@ import NotFound from './components/pages/NotFound';
 import BasicAnimations from './components/animation/BasicAnimations';
 import ExampleAnimations from './components/animation/ExampleAnimations';
 import TestForm, {testFormModel} from './components/hy/orders/BasicForm';
-//import addProduct, {addProductModel} from './components/hy/product/addProduct';
+import CateSelect, {cateSelectModel} from './components/hy/product/CateSelect';
 import dva, { connect } from 'dva';
 import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
 const app = dva();
 
 //app.model(loginModel);
 app.model(testFormModel);
-
+app.model(cateSelectModel);
 const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
     require.ensure([], require => {
         cb(null, require('./components/ui/Wysiwyg').default);
@@ -45,7 +45,7 @@ const routes =
         <IndexRedirect to="/login" />
         <Route path={'hy'} component={App}>
                 <Route path={'orders/form'} component={TestForm} />
-            <Route path={'product/addProduct'} component={TestForm} />
+            <Route path={'product/addProduct'} component={CateSelect} />
         </Route>
         <Route path={'app'} component={App}>
           

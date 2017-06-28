@@ -37,6 +37,7 @@ export const toQueryString = (obj) =>{
 export const Request = (url, params={}, method='POST') => {
   let isOk;
   let host = BaseAjaxUrl + url;
+  console.log(method)
   return new Promise((resolve, reject) => {
     fetch(host, {
       method: method,
@@ -62,6 +63,7 @@ export const Request = (url, params={}, method='POST') => {
         }
       })
       .catch((error) => {
+
         reject(error);
       });
   });

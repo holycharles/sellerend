@@ -78,7 +78,7 @@ class SiderCustom extends Component {
                         key="/app/ui/product"
                         title={<span><Icon type="scan" /><span className="nav-text">商品管理</span></span>}
                     >
-                        <Menu.Item key="/hy/orders/form"><Link to={'/hy/orders/form'}>添加商品</Link></Menu.Item>
+                        <Menu.Item key="/hy/product/addProduct"><Link to={'/hy/product/addProduct'}>添加商品</Link></Menu.Item>
 
                     </SubMenu>
 
