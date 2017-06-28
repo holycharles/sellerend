@@ -88,6 +88,7 @@ export const testFormModel = {
 class BasicTable extends Component {
     handleSearch = (e) => {
         e.preventDefault();
+        alert(12321321)
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const {dispatch} = this.props;
