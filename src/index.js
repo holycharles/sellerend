@@ -53,12 +53,15 @@ app.model({
     effects: {
         *init({payload}, {call, put}){
             let {memberId} = JSON.parse(localStorage.getItem("auth"));
+
             yield put({ type: 'initState', payload: {memberId}});
         },
     },
     subscriptions: {
         setup({dispatch}) {
-            dispatch({type: 'init'});
+            if(localStorage.getItem("auth")) {
+                dispatch({type: 'init'});
+            }
         }
     },
 });
@@ -73,7 +76,7 @@ const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
 };
 
 let authLogin = ()=> {
-    if(!localStorage.getItem("auth") && localStorage.getItem("remember")) {
+    if(!localStorage.getItem("auth") && !localStorage.getItem("remember")) {
         location.href="#/login"
     } else {
 
