@@ -22,11 +22,9 @@ class SiderCustom extends Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
         this.onCollapse(nextProps.collapsed);
     }
     onCollapse = (collapsed) => {
-        console.log(collapsed);
         this.setState({
             collapsed,
             mode: collapsed ? 'vertical' : 'inline',
@@ -36,7 +34,6 @@ class SiderCustom extends Component {
         this.setState({
             selectedKey: e.key
         });
-        console.log(this.state);
 
     };
     openMenu = v => {

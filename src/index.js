@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App, {appModel} from './App';
+import { message } from 'antd';
 import './index.css';
 import './style/lib/animate.css';
 //import { Router, Route, hashHistory, IndexRedirect } from 'react-router';
@@ -28,11 +29,39 @@ import ExampleAnimations from './components/animation/ExampleAnimations';
 import TestForm, {testFormModel} from './components/hy/orders/BasicForm';
 import CateSelect, {cateSelectModel} from './components/hy/product/CateSelect';
 import ProductAdd, {productAddModel} from './components/hy/product/ProductAdd';
-
 import dva, { connect } from 'dva';
 import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
-const app = dva();
-
+const app = dva({
+    onError(e) {
+        message.config({
+            top: 8,
+            duration: 3,
+        });
+        message.error(e.message, 3);
+    },
+});
+app.model({
+    namespace: 'init',
+    state: {
+        memberId: 0
+    },
+    reducers: {
+        initState(state, { payload }) {
+            return { ...state, ...payload};
+        }
+    },
+    effects: {
+        *init({payload}, {call, put}){
+            let {memberId} = JSON.parse(localStorage.getItem("auth"));
+            yield put({ type: 'initState', payload: {memberId}});
+        },
+    },
+    subscriptions: {
+        setup({dispatch}) {
+            dispatch({type: 'init'});
+        }
+    },
+});
 app.model(loginModel);
 app.model(testFormModel);
 app.model(cateSelectModel);
@@ -52,6 +81,7 @@ let authLogin = ()=> {
 }
 const routes =
     <Route path={'/'} components={Page}  >
+        <IndexRedirect to="hy/orders/form" />
         <Route path={'hy'} component={App} onEnter={authLogin}>
                 <Route path={'orders/form'} component={TestForm} />
             <Route path={'product/addProduct'} component={CateSelect} />

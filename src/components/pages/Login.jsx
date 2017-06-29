@@ -94,7 +94,6 @@ class Login extends React.Component {
     }
 }
 function mapStateToProps(state) {
-  console.log(state);
   return { ...state.login };
 }
 //export default Form.create()(Login);
