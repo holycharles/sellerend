@@ -18,21 +18,85 @@ export const testFormModel = {
             key: 'orderSn',
 
         },
+         {
+            title: '买家用户名',
+            dataIndex: 'memberName',
+            key: 'memberName',
+
+        },
         {
-          title: '店面名称',
+          title: '店铺',
           dataIndex: 'sellerName',
           key: 'sellerName',
+      },
+        {
+            title: '商品金额',
+            dataIndex: 'moneyProduct',
+            key: 'moneyProduct',
+        },
+        {
+            title: '订单总金额 ',
+            dataIndex: 'moneyOrder',
+            key: 'moneyOrder',
+        },
+        {
+            title: '付款状态',
+            dataIndex: '',
+            key: '',
+        },
+        {
+            title: '订单状态',
+            dataIndex: 'orderState',
+            key: 'orderState',
+        },
+        {
+            title: '发票状态',
+            dataIndex: 'invoiceStatus',
+            key: 'invoiceStatus',
+        },
+        {
+            title: '发票抬头',
+            dataIndex: 'invoiceTitle',
+            key: 'invoiceTitle',
+        },
+        {
+            title: '发票类型',
+            dataIndex: 'invoiceType',
+            key: 'invoiceType',
+        },
+        {
+            title: '支付方式',
+            dataIndex: 'paymentName',
+            key: 'paymentName',
+        },
+        {
+            title: '物流名称',
+            dataIndex: 'logisticsName',
+            key: 'logisticsName',
+        },
+        {
+            title: '快递单号 ',
+            dataIndex: 'logisticsNumber',
+            key: 'logisticsNumber',
+        },
+          {
+              title: '发货时间',
+              dataIndex: 'deliverTime',
+              key: 'deliverTime',
+          },
+        {
+          title: '创建时间 ',
+          dataIndex: 'createTime',
+          key: 'createTime',
 
-      }, {
-          title: '电话',
-          dataIndex: 'mobile',
-          key: 'mobile',
-      }, {
-          title: '地址',
-          dataIndex: 'addressInfo',
-          key: 'addressInfo',
+      },
+        {
+            title: '修改时间',
+            dataIndex: 'updateTime',
+            key: 'updateTime',
 
-      }],
+        }
+    ],
       rows: [],
       loading: false,
       pagination: {
@@ -55,26 +119,30 @@ export const testFormModel = {
     *fetch({payload}, {call, put}){
            try {
                 yield put({ type: 'fetchStart', payload: {loading: true}});
-                const {rows, total} = yield call(Request, 'seller/newServer/order/orders/list', {page: payload.current, rows: payload.pageSize, sellerId:1});
-                payload.total = total;
-                yield put({ type: 'fetchEnd', payload: { rows, pagination:payload, loading: false}});
+                const {memberId, pagination} = payload;
+                const {rows, total} = yield call(Request, 'seller/newServer/order/orders/list', {page: pagination.current, rows: pagination.pageSize, sellerId:memberId});
+                pagination.total = total;
+                yield put({ type: 'fetchEnd', payload: { rows, pagination:pagination, loading: false}});
 
             } catch (error) {
-                console.log("error")
+                console.log(error)
             }
      },
       *fetchSearch ({payload}, {call, put}){
           try {
               yield put({ type: 'fetchStart', payload: {loading: true}});
-              const {rows} = yield call(Request, 'seller/newServer/order/orders/list?sellerId=1', payload);
-              yield put({ type: 'fetchEnd', payload: { rows, pagination:payload, loading: false}});
+              console.log("payload", payload);
+              const {rows, total} = yield call(Request, 'seller/newServer/order/orders/list?sellerId=1', payload.values);
+              payload.values.total = total;
+              yield put({ type: 'fetchEnd', payload: { rows, pagination: payload.values, loading: false}});
 
           } catch (error) {
               console.log("error")
           }
       },
       *setPage ({payload}, {call, put}){
-            yield put({ type: 'fetchEnd', payload: { pagination: payload }});
+            const {pagination} = payload;
+            yield put({ type: 'fetchEnd', payload: {pagination}});
       }
   },
   subscriptions: {
@@ -88,22 +156,22 @@ export const testFormModel = {
 class BasicTable extends Component {
     handleSearch = (e) => {
         e.preventDefault();
-        alert(12321321)
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const {dispatch} = this.props;
-                dispatch({type: 'testFormModel/fetchSearch', payload: values});
+                const {dispatch, memberId, pagination} = this.props;
+                dispatch({type: 'testFormModel/fetchSearch', payload: {values, memberId}});
+                dispatch({type: 'testFormModel/setPage', payload: {pagination}});
             }
         });
     }
     componentDidMount() {
-        const {pagination, dispatch} = this.props;
-        dispatch({type: 'testFormModel/fetch', payload: pagination});
+        const {pagination, dispatch, memberId} = this.props;
+        dispatch({type: 'testFormModel/fetch', payload: {pagination, memberId}});
     }
     handleTableChange = (pagination, filters, sorter) => {
-        const {dispatch} = this.props;
-        dispatch({type: 'testFormModel/fetch', payload: pagination});
-        dispatch({type: 'testFormModel/setPage', payload: pagination});
+        const {dispatch, memberId} = this.props;
+        dispatch({type: 'testFormModel/fetch', payload: {pagination, memberId}});
+        dispatch({type: 'testFormModel/setPage', payload: {pagination}});
 
 //        // this.setState({
         //     pagination: pager,
@@ -117,6 +185,7 @@ class BasicTable extends Component {
         // });
     }
     render() {
+        console.log(this.props)
         const { columns, rows } = this.props;
         const formItemLayout = {
             labelCol: { span: 5 },
@@ -171,6 +240,6 @@ class BasicTable extends Component {
 
 function mapStateToProps(state) {
 
-  return { ...state.testFormModel };
+  return { ...state.testFormModel, ...state.init };
 }
 export default connect(mapStateToProps)(Form.create()(BasicTable));

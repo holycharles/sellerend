@@ -6,6 +6,7 @@ import SiderCustom from './components/SiderCustom';
 import SiderCustom_hy from './components/SiderCustom_hy';
 import HeaderCustom from './components/HeaderCustom';
 
+
 class App extends Component {
     state = {
         collapsed: false,
@@ -27,7 +28,6 @@ class App extends Component {
         )
     }
     render() {
-
         let  {route} = this.props;
         let path = route.path;
         return (
@@ -48,4 +48,5 @@ class App extends Component {
     }
 }
 
-export default App;
+
+export default App
