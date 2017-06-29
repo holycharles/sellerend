@@ -86,23 +86,23 @@ module.exports = {
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
-    preLoaders: [
-      {
-        test: /\.(js|jsx)$/,
-        loader: 'eslint',
-        enforce: 'pre',
-        use: [{
-          // @remove-on-eject-begin
-          // Point ESLint to our predefined config.
-          options: {
-            useEslintrc: true
-          },
-          // @remove-on-eject-end
-          loader: 'eslint-loader'
-        }],
-        include: paths.appSrc,
-      }
-    ],
+    // preLoaders: [
+    //   {
+    //     test: /\.(js|jsx)$/,
+    //     loader: 'eslint',
+    //     enforce: 'pre',
+    //     use: [{
+    //       // @remove-on-eject-begin
+    //       // Point ESLint to our predefined config.
+    //       options: {
+    //         useEslintrc: true
+    //       },
+    //       // @remove-on-eject-end
+    //       loader: 'eslint-loader'
+    //     }],
+    //     include: paths.appSrc,
+    //   }
+    // ],
     loaders: [
       // ** ADDING/UPDATING LOADERS **
       // The "url" loader handles all assets unless explicitly excluded.
