@@ -47,7 +47,7 @@ let authLogin = ()=> {
     if(!localStorage.getItem("auth") && localStorage.getItem("remember")) {
         location.href="#/login"
     } else {
-        location.href="#/hy/orders/form"
+
     }
 }
 const routes =
