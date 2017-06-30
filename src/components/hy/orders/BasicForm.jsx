@@ -166,10 +166,12 @@ class BasicTable extends Component {
     }
     componentDidMount() {
         const {pagination, dispatch, memberId} = this.props;
+        console.log(memberId);
         dispatch({type: 'testFormModel/fetch', payload: {pagination, memberId}});
     }
     handleTableChange = (pagination, filters, sorter) => {
         const {dispatch, memberId} = this.props;
+
         dispatch({type: 'testFormModel/fetch', payload: {pagination, memberId}});
         dispatch({type: 'testFormModel/setPage', payload: {pagination}});
 

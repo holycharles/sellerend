@@ -2,17 +2,24 @@
  * Created by hao.cheng on 2017/4/15.
  */
 import React, { Component }  from 'react';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,DatePicker, Button, AutoComplete } from 'antd';
+import { Form, Input, Tooltip, Icon, Radio,Cascader, Select, Row, Col, Checkbox,DatePicker, Button, AutoComplete } from 'antd';
 const FormItem = Form.Item;
 import dva, { connect } from 'dva';
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 let cateId;
+import {Request} from "../../../utils"
+import Moment from 'moment'
+const RadioGroup = Radio.Group;
 export const productAddModel = {
     namespace: 'productAddModel',
     state: {
 
         rows: [],
+        catePath:"",
+        brandList:[],
+        sellList:[],
+        valueob: 1,
 
     },
 
@@ -45,6 +52,19 @@ export const productAddModel = {
                 console.log("error")
             }
         },
+        *getData({payload}, {call, put}){
+
+            const data=yield call(Request, 'seller/newServer/product/add', {seller_id:1,cateId:13},'POST');
+            let obj=eval(data.data);
+          console.log("AAAAAA"+JSON.stringify(obj))
+          /*  console.log("aaaaa"+obj.catePath)*/
+/*
+    console.log("barnndnddndn"+provinceOptions)*/
+            yield put({ type: 'fetchEnd', payload: { "catePath" : obj.catePath,"brandList":obj.brand,"sellList":obj.sellerCate}})
+
+            //   console.log(JSON.stringify(data.data))
+          //  console.log("1111"+data)
+        },
         *fetchSearch ({payload}, {call, put}){
 
         },
@@ -66,19 +86,25 @@ class BasicTablesAdd extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const {dispatch} = this.props;
-                dispatch({type: 'testFormModel/fetchSearch', payload: values});
+                dispatch({type: 'productAddModel/fetchSearch', payload: values});
             }
         });
     }
     componentDidMount() {
         const {dispatch} = this.props;
         console.log(this.props);
-        dispatch({type: 'cateSelectModel/fetch'})
+
+        dispatch({type: 'productAddModel/getData'})
     }
 
     onChange(value){
 
         cateId=value[2];
+
+    }
+    onggChange(value){
+
+     alert(value)
 
     }
     goNext = (e) => {
@@ -108,6 +134,22 @@ class BasicTablesAdd extends Component {
             wrapperCol: { span: 19 },
         };
         const { getFieldDecorator } = this.props.form;
+
+
+        let children = [];
+        let selectObj=  this.props.brandList;
+        for (let i = 0; i < selectObj.length; i++) {
+            children.push(<Option key={selectObj[i].id}>{selectObj[i].nameFirst}{selectObj[i].name}</Option>);
+        }
+
+
+
+/*
+        let selectSellList=  this.props.sellList;
+        for (let i = 0; i < selectSellList.length; i++) {
+            cataList.push(<Option key={selectSellList[i].value}>{selectObj[i].nameFirst}{selectObj[i].name}</Option>);
+        }*/
+
         return (
             <Form onSubmit={this.handleSubmit}>
 
@@ -117,7 +159,7 @@ class BasicTablesAdd extends Component {
                     hasFeedback
                 >
                     <Tooltip placement="topLeft" title="Prompt Text" arrowPointAtCenter>
-                        A/B/C
+                        {this.props.catePath}
                     </Tooltip>
                 </FormItem>
                 <FormItem
@@ -127,13 +169,18 @@ class BasicTablesAdd extends Component {
                 >
 
                     {getFieldDecorator('brandId', {
-                        initialValue: ['use'],
+
                         rules: [{  required: true, }],
                     })(
-                        <Select placeholder="选择品牌">
-                            <Option value="china">China</Option>
-                            <Option value="use">U.S.A</Option>
+
+                        <Select   showSearch
+                                  placeholder="请选择人员"
+                                  optionFilterProp="children"
+                                  notFoundContent="无法找到"
+                                  searchPlaceholder="输入关键词"  style={{ width: 400 }} onChange={this.handleProvinceChange}>
+                            {children}
                         </Select>
+
                     )}
 
                 </FormItem>
@@ -280,7 +327,7 @@ class BasicTablesAdd extends Component {
                 >
 
                     {getFieldDecorator('upTime', {
-                        rules: [{ required: true, message: '请选择日期', whitespace: true }],
+
                     })(
                         <DatePicker
 
@@ -289,6 +336,61 @@ class BasicTablesAdd extends Component {
                             placeholder="请选择日期"
 
                         />
+                    )}
+
+                </FormItem>
+
+
+                <FormItem
+                    {...formItemLayout}
+                    label="商家自有商品分类: "
+                    hasFeedback
+                >
+
+                    {getFieldDecorator('sellerCate_0', {
+
+                    })(
+                        <Cascader   options={this.props.sellList} onChange={this.onChange}  style={{ width: '100%'}} />
+                    )}
+
+                </FormItem>
+
+
+                <FormItem
+                    {...formItemLayout}
+                    label="是否商家推荐:"
+                    hasFeedback
+                >
+
+                    {getFieldDecorator('sellerIsTop', {
+                        initialValue:1,
+                        rules: [{ required: true}],
+
+                    })(
+                        <RadioGroup >
+                            <Radio value={1}>不推荐</Radio>
+                            <Radio value={2}>推荐</Radio>
+                        </RadioGroup>
+                    )}
+
+                </FormItem>
+
+
+                <FormItem
+                    {...formItemLayout}
+                    label="是否启用规格:"
+                    hasFeedback
+                >
+
+                    {getFieldDecorator('isNorm', {
+                        initialValue:1,
+                        rules: [{ required: true}],
+
+                    })(
+                        <RadioGroup onChange={this.onggChange} >
+                            <Radio value={1}>不启用</Radio>
+                            <Radio value={2}>启用</Radio>
+                        </RadioGroup>
                     )}
 
                 </FormItem>

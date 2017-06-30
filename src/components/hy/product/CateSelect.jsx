@@ -82,6 +82,7 @@ class BasicTables extends Component {
 
     }
     goNext = (e) => {
+        console.log(cateId)
         const {dispatch} = this.props;
         dispatch({type: 'cateSelectModel/go'})
     }
