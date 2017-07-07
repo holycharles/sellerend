@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/13.
  */
 import React, { Component } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon} from 'antd';
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import { Link } from 'react-router';
@@ -50,8 +50,9 @@ class SiderCustom extends Component {
                 collapsible
                 collapsed={this.props.collapsed}
                 onCollapse={this.onCollapse}
-                style={{overflowY: 'auto'}}
+
             >
+                {/*style={{overflowY: 'auto'}}*/}
                 <div className="logo" />
                 <Menu
                     onClick={this.menuClick}
@@ -76,6 +77,7 @@ class SiderCustom extends Component {
                         title={<span><Icon type="scan" /><span className="nav-text">商品管理</span></span>}
                     >
                         <Menu.Item key="/hy/product/addProduct"><Link to={'/hy/product/addProduct'}>添加商品</Link></Menu.Item>
+                        <Menu.Item key="/hy/product/ProductList"><Link to={'/hy/product/ProductList'}>商品列表</Link></Menu.Item>
 
                     </SubMenu>
 

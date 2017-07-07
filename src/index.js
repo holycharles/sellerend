@@ -29,6 +29,7 @@ import ExampleAnimations from './components/animation/ExampleAnimations';
 import TestForm, {testFormModel} from './components/hy/orders/BasicForm';
 import CateSelect, {cateSelectModel} from './components/hy/product/CateSelect';
 import ProductAdd, {productAddModel} from './components/hy/product/ProductAdd';
+import ProductList, {productListModel} from './components/hy/product/ProductList';
 import dva, { connect } from 'dva';
 import { Router, Route, IndexRedirect, hashHistory} from 'dva/router';
 const app = dva({
@@ -69,6 +70,7 @@ app.model(loginModel);
 app.model(testFormModel);
 app.model(cateSelectModel);
 app.model(productAddModel);
+app.model(productListModel);
 const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
     require.ensure([], require => {
         cb(null, require('./components/ui/Wysiwyg').default);
@@ -89,6 +91,7 @@ const routes =
                 <Route path={'orders/form'} component={TestForm} />
             <Route path={'product/addProduct'} component={CateSelect} />
             <Route path={'product/productAdd'} component={ProductAdd} />
+            <Route path={'product/productList'} component={ProductList} />
         </Route>
         <Route path={'app'} component={App}>
           
