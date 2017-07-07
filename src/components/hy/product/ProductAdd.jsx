@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/15.
  */
 import React, { Component }  from 'react';
-import { Form, Input, Tooltip, Icon, Radio,Cascader, Select, Row, Col, Checkbox,DatePicker, Button, AutoComplete } from 'antd';
+import { Form, Input, Tooltip, Icon, Radio,Cascader, Select, Row, Col, Table,Checkbox,DatePicker, Button, AutoComplete } from 'antd';
 const FormItem = Form.Item;
 import dva, { connect } from 'dva';
 const Option = Select.Option;
@@ -11,6 +11,8 @@ let cateId;
 import {Request} from "../../../utils"
 import Moment from 'moment'
 const RadioGroup = Radio.Group;
+const CheckboxGroup = Checkbox.Group;
+
 export const productAddModel = {
     namespace: 'productAddModel',
     state: {
@@ -20,14 +22,50 @@ export const productAddModel = {
         brandList:[],
         sellList:[],
         valueob: 1,
+        showtable:false,
+        dataSource:false,
+        showtablenrom:false,
+        normList:[],
+        checkBoxValue:[],
+        normListTabel:[],
+        columns :[],
 
+
+/* columns : [
+ {
+ title: '规格',
+ dataIndex: 'orderSn',
+ key: 'orderSn',
+
+ },
+ {
+ title: '买家用户名',
+ dataIndex: 'memberName',
+ key: 'memberName',
+
+ },
+ {
+ title: '店铺',
+ dataIndex: 'sellerName',
+ key: 'sellerName',
+ }
+
+ ],*/
     },
 
     reducers: {
         fetchEnd(state, { payload }) {
             //console.log("payload1" , payload);
-            console.log(payload);
+            console.log("aaaaaaaaaaaaaaaaaa",payload.aaa);
+            if(payload.aaa) {
 
+                console.log(state.columns.indexOf(payload.aaa))
+
+               state.columns.unshift(payload.aaa);
+
+            }
+            console.log(state);
+            //console.log([...state.columns,...payload.aaa]);
             return { ...state, ...payload};
         },
         fetchStart (state, { payload }) {
@@ -40,7 +78,7 @@ export const productAddModel = {
 
             try {
                 yield put({ type: 'fetchStart', payload: {loading: true}});
-             /*   console.log(yield call(Request, 'seller/newServer/product/chooseCate', {sellerId:1},'POST'));*/
+                /*   console.log(yield call(Request, 'seller/newServer/product/chooseCate', {sellerId:1},'POST'));*/
                 // const {rows} = yield call(Request, 'seller/newServer/product/chooseCate.html', {sellerId:1});
                 //payload.total = total;
                 const {data}=yield call(Request, 'seller/newServer/product/chooseCate', {sellerId:1},'POST');
@@ -56,15 +94,92 @@ export const productAddModel = {
 
             const data=yield call(Request, 'seller/newServer/product/add', {seller_id:1,cateId:13},'POST');
             let obj=eval(data.data);
-          console.log("AAAAAA"+JSON.stringify(obj))
-          /*  console.log("aaaaa"+obj.catePath)*/
-/*
-    console.log("barnndnddndn"+provinceOptions)*/
-            yield put({ type: 'fetchEnd', payload: { "catePath" : obj.catePath,"brandList":obj.brand,"sellList":obj.sellerCate}})
+            console.log("AAAAAA"+JSON.stringify(obj))
+            /*  console.log("aaaaa"+obj.catePath)*/
+            /*
+             console.log("barnndnddndn"+provinceOptions)*/
+            yield put({ type: 'fetchEnd', payload: { "catePath" : obj.catePath,"brandList":obj.brand,"sellList":obj.sellerCate,"normList":obj.normList}})
 
             //   console.log(JSON.stringify(data.data))
-          //  console.log("1111"+data)
+            //  console.log("1111"+data)
         },
+        *isNormCk ({payload}, {call, put}){
+
+            if(payload==2)
+            {
+                yield put({ type: 'fetchEnd', payload: {"showtable":true }})
+
+
+
+            }
+            else
+            {
+                yield put({ type: 'fetchEnd', payload: {"showtable":false }})
+                yield put({ type: 'fetchEnd', payload: {"showtablenrom":false }})
+
+            }
+
+
+        },
+        *xzChane ({payload}, {call, put}){
+/*
+ let aaa={
+     title: '库存ss',
+     dataIndex: 'kcss',
+
+ }*/
+            let aaa= [{
+                title: 'sku',
+                dataIndex: 'sku',
+            }, {
+                title: '库存',
+                dataIndex: 'kc',
+
+            }, {
+                title: '住址',
+                dataIndex: 'address',
+
+            },
+                {
+                    title: 'PC价格',
+                    dataIndex: 'pcprice',
+
+                },{
+                    title: 'mobile价格',
+                    dataIndex: 'mobilePric',
+
+                }]
+
+            //console.log(payload.e);
+            let obj
+            let nonres=payload.e;
+            let normlist=payload.norms;
+            let  xx
+            console.log("ddddddd",normlist)
+
+            for(var i=0;i<normlist.length;i++)
+            {
+                let obj=normlist[i].attrList;
+
+                for(var b=0;b<obj.length;b++) {
+
+                    for (var j = 0; j < nonres.length; j++) {
+                        if(obj[b].value== nonres[j]) {
+                              xx={
+                                title: normlist[i].name,
+                                dataIndex: '1',
+
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            aaa.push(xx)
+            yield put({ type: 'fetchEnd', payload: {"showtablenrom":true, "columns":aaa }})
+        },
+
         *fetchSearch ({payload}, {call, put}){
 
         },
@@ -90,9 +205,45 @@ class BasicTablesAdd extends Component {
             }
         });
     }
+    show =() =>  {
+        let abc = [];
+        if(this.props.showtable) {
+            /* alert(this.props.normList)*/
+            let objn = this.props.normList;
+            for (var i = 0; i < objn.length; i++) {
+             //   console.log(objn[i].attrList)
+
+                abc.push(
+
+                    <CheckboxGroup options={objn[i].attrList} onChange={this.xzChane}/>
+
+                )
+            }
+        }
+
+        return abc;
+
+
+    }
+
+    showtable =() =>  {
+        let abc = [];
+        if(this.props.showtablenrom) {
+            console.log("sadasdassadsa")
+            abc.push(
+
+                <Table dataSource={this.props.dataSource} columns={this.props.columns} />
+
+            )
+        }
+
+        return abc;
+
+
+    }
     componentDidMount() {
         const {dispatch} = this.props;
-        console.log(this.props);
+      //  console.log(this.props);
 
         dispatch({type: 'productAddModel/getData'})
     }
@@ -102,11 +253,25 @@ class BasicTablesAdd extends Component {
         cateId=value[2];
 
     }
-    onggChange(value){
+    onggChange = (e) =>{
+      //  console.log("__________________",e.target.value)
+        const {dispatch} = this.props;
+        //    this.props.form.getFieldValue('isNorm')
+        dispatch({type: 'productAddModel/isNormCk',payload: e.target.value})
 
-     alert(value)
 
     }
+    xzChane = (e) =>{
+   //      console.log("__________________",e)
+    //    console.log("ddddddd",this.props.normList)
+        const {dispatch} = this.props;
+        let norms=this.props.normList;
+
+
+        dispatch({type: 'productAddModel/xzChane',payload: {e, norms}})
+
+    }
+
     goNext = (e) => {
 
 
@@ -139,16 +304,17 @@ class BasicTablesAdd extends Component {
         let children = [];
         let selectObj=  this.props.brandList;
         for (let i = 0; i < selectObj.length; i++) {
+
             children.push(<Option key={selectObj[i].id}>{selectObj[i].nameFirst}{selectObj[i].name}</Option>);
         }
 
 
 
-/*
-        let selectSellList=  this.props.sellList;
-        for (let i = 0; i < selectSellList.length; i++) {
-            cataList.push(<Option key={selectSellList[i].value}>{selectObj[i].nameFirst}{selectObj[i].name}</Option>);
-        }*/
+        /*
+         let selectSellList=  this.props.sellList;
+         for (let i = 0; i < selectSellList.length; i++) {
+         cataList.push(<Option key={selectSellList[i].value}>{selectObj[i].nameFirst}{selectObj[i].name}</Option>);
+         }*/
 
         return (
             <Form onSubmit={this.handleSubmit}>
@@ -393,6 +559,12 @@ class BasicTablesAdd extends Component {
                         </RadioGroup>
                     )}
 
+                </FormItem>
+                <FormItem {...tailFormItemLayout}>
+                {this.show()}
+                </FormItem>
+                <FormItem {...tailFormItemLayout}>
+                    {this.showtable()}
                 </FormItem>
 
 
